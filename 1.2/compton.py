@@ -42,7 +42,9 @@ plt.rcParams['figure.figsize'] = [18, 14]
 
 
 # $$\frac{1}{N(\theta)}-\frac{1}{N(0)}=A(1-cos\theta)$$
+
 # $$a=A$$
+
 # $$b=\frac{1}{N(0)}$$
 
 # In[4]:
