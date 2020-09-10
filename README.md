@@ -1,4 +1,4 @@
 # MIPT Quantum physics lab course
 
-* Lab 1: Compton effect
+* Lab 1.2: Compton effect
 
