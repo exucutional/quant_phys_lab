@@ -1,2 +1,4 @@
-# quant_phys_lab
-MIPT Quantum physics lab course
+# MIPT Quantum physics lab course
+
+* Lab 1: Compton effect
+
