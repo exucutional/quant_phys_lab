@@ -3,7 +3,7 @@
 
 # # Отчет по лабораторной работе 1.2
 # 
-# ## Исследование эффекта комптона
+# ## Исследование эффекта Комптона
 # Конкс Эрик, Б01-818
 
 # ### Результат измерения и обработка данных
@@ -26,10 +26,10 @@ pd.DataFrame({'θ, °': degrees, 'N': N}).T
 
 
 x = 1 - np.cos(np.radians(degrees))
-x_error = np.radians(2) * np.sin(np.radians(degrees))
-x_error[0] = np.radians(2) * np.sin(np.radians(1))
+x_error = np.radians(7) * np.sin(np.radians(degrees))
+x_error[0] = x_error[1]
 y = np.divide(1, N)
-y_error = np.divide(1, np.multiply(N, N))
+y_error = np.divide(2, np.multiply(N, N)) + 0.01 * y
 pd.DataFrame({'1-cos(θ)': x, 'Δ(1-cos(θ))': x_error, '1/N': y, 'Δ(1/N)': y_error})
 
 
@@ -51,11 +51,9 @@ plt.rcParams['figure.figsize'] = [18, 14]
 
 
 f = lambda p, x: p[0] * x + p[1]
-
-
 quad_model = odr.Model(f)
 data = odr.RealData(x, y, sx=x_error, sy=y_error)
-modr = odr.ODR(data, quad_model, beta0=[0., 1.])
+modr = odr.ODR(data, quad_model, beta0=[0.002, 0.002])
 out = modr.run()
 beta_opt = out.beta
 beta_err = out.sd_beta
@@ -64,13 +62,16 @@ print('Fit parameter 1-sigma error y = a * x + b')
 print('———————————–—————————————————————————————')
 for i in range(len(beta_opt)):
     print(f"{beta_name[i]} = {beta_opt[i]} +- {beta_err[i]}")
+    print("    {:.5f} +- {:.5f}".format(beta_opt[i], beta_err[i]))
+    
+print(f"chisq = {out.res_var * (len(x) - len(beta_opt))}")
 
 
-# In[12]:
+# In[5]:
 
 
 plt.plot(x, f(beta_opt, x), color='black', linewidth=4, label='fit curve')
-plt.plot(x, y, 'ro', label='init curve', markersize=12)
+plt.plot(x, y, 'ro', label='data points', markersize=12)
 plt.errorbar(x, y, xerr=x_error, yerr=y_error, fmt="none", linewidth=4)
 plt.xlabel('1 - cos(θ)')
 plt.ylabel('1 / N(θ)')
