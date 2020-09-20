@@ -56,7 +56,8 @@ data = odr.RealData(x, y, sx=x_error, sy=y_error)
 modr = odr.ODR(data, quad_model, beta0=[0.002, 0.002])
 out = modr.run()
 beta_opt = out.beta
-beta_err = out.sd_beta
+#beta_err = out.sd_beta
+beta_err = np.sqrt(np.diag(out.cov_beta))
 beta_name = ['a', 'b']
 print('Fit parameter 1-sigma error y = a * x + b')
 print('———————————–—————————————————————————————')
