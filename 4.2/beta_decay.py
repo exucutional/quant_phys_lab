@@ -67,12 +67,12 @@ data = odr.RealData(x, y, sx=x_err, sy=y_err)
 modr = odr.ODR(data, quad_model, beta0=[0.002, 0.002])
 out = modr.run()
 beta_opt = out.beta
-#beta_err = np.sqrt(np.diag(out.cov_beta))
-beta_err = out.sd_beta
+beta_err = np.sqrt(np.diag(out.cov_beta))
+#beta_err = out.sd_beta
 beta_name = ['a', 'b']
 T_max = -beta_opt[1]/beta_opt[0]
 print('Fit parameter 1-sigma error y = a * x + b')
-print('———————————–—————————————————————————————')
+print('—————————————————————————————————————————')
 for i in range(len(beta_opt)):
     print(f"{beta_name[i]} = {beta_opt[i]} +- {beta_err[i]}")
     print("    {:.2f} +- {:.2f}".format(beta_opt[i], beta_err[i]))
@@ -114,5 +114,6 @@ T_max_err = T_max * np.sqrt((beta_err[0] / beta_opt[0])**2 + (beta_err[1] / beta
 print('Result')
 print('——————————————————————————————————————————————————')
 print(f"T_max = {T_max} +- {T_max_err} кэВ")
-print(f"T_max = {int(np.round(T_max))} +- {int(np.round(T_max_err))} кэВ")
+print(f'T_max = {int(np.round(T_max))} +- {int(np.round(T_max_err))} кэВ')
+print(f'T_max_th = 664 кэВ')
 
