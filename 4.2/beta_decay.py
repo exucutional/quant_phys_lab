@@ -77,7 +77,7 @@ for i in range(len(beta_opt)):
     print(f"{beta_name[i]} = {beta_opt[i]} +- {beta_err[i]}")
     print("    {:.2f} +- {:.2f}".format(beta_opt[i], beta_err[i]))
     
-print(f"chisq = {out.res_var * (len(x) - len(beta_opt))}")
+print('chisq = {:.2f}'.format(out.res_var * (len(x) - len(beta_opt))))
 
 
 # In[5]:
@@ -115,5 +115,5 @@ print('Result')
 print('——————————————————————————————————————————————————')
 print(f"T_max = {T_max} +- {T_max_err} кэВ")
 print(f'T_max = {int(np.round(T_max))} +- {int(np.round(T_max_err))} кэВ')
-print(f'T_max_th = 664 кэВ')
+print(f'T_max_th = 512 кэВ')
 
