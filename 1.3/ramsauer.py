@@ -33,14 +33,6 @@ m = 9.11 * 10**-31
 e = 1.6 * 10**-19
 
 
-# $$2l_{max}=\frac{h}{\sqrt{2m(E_1+U_0)}}$$
-
-# $$2l_{min}=\frac{3}{2}\frac{h}{\sqrt{2m(E_2+U_0)}}$$
-
-# $$l=\frac{h\sqrt{5}}{\sqrt{32m(E_2-E_1)}}$$
-
-# $$U_0=\frac{4}{5}E_2 - \frac{9}{5}E_1$$
-
 # In[3]:
 
 
@@ -120,10 +112,10 @@ U0_st2_err = 4/5*Vmin2_err + 9/5*Vmax2_err
 
 
 plot = plt.figure(num='ВАХ')
-plt.plot(Vk1, Ia1, 'bo', label='data points 2.84 V', markersize=15)
+plt.plot(Vk1, Ia1, 'ro', label='data points 2.84 V', markersize=15)
 plt.plot(xlin1, ylin1, color='black', linewidth=4, label='spline')
 plt.plot(Vk2, Ia2, '+', label='data points 2.56 V', markersize=20, mew=3)
-plt.plot(xlin2, ylin2, color='black', linewidth=4, label='spline')
+plt.plot(xlin2[10:750], ylin2[10:750], color='black', linewidth=4, label='spline')
 plt.axhline(y=0.0134, color="black", linestyle="--")
 plt.axvline(x=Vmin1, color="black", linestyle="--")
 plt.axhline(y=0.047, color="black", linestyle="--")
@@ -170,6 +162,20 @@ lmin_st2 = get_display_string(lmin_st2, lmin_st2_err)
 l_st2 = get_display_string(l_st2, l_st2_err)
 U0_st2 = get_display_string(U0_st2/10**10, U0_st2_err/10**10)
 
+
+# $$Найдем\ ширину\ потенциальной\ ямы\ l\ и\ глубину\ U_0$$
+
+# $$2l_{max}=\frac{h}{\sqrt{2m(E_1+U_0)}}$$
+
+# $$2l_{min}=\frac{3}{2}\frac{h}{\sqrt{2m(E_2+U_0)}}$$
+
+# $$l=\frac{h\sqrt{5}}{\sqrt{32m(E_2-E_1)}}$$
+
+# $$U_0=\frac{4}{5}E_2 - \frac{9}{5}E_1$$
+
+# In[9]:
+
+
 print("Vнакала = 2.56 В")
 dt = pd.DataFrame({'Динамика': [lmax_dyn2, lmin_dyn2, l_dyn2, U0_dyn2],
                    'Статика': [lmax_st2, lmin_st2, l_st2, U0_st2]},
@@ -181,36 +187,40 @@ dt = pd.DataFrame({'Динамика': [lmax_dyn1, lmin_dyn1, l_dyn1, U0_dyn1],
                    'Статика': [lmax_st1, lmin_st1, l_st1, U0_st1]},
                    index = ['lmax, Å', 'lmin, Å', 'l, Å', 'U0, В'])
 print(dt)
-print('\nl_th = 1.08 Å')
+print('\nРазмер электронной оболочки ксенона = 1.08 Å')
 
 
-# $$Оценим\ E_n\ используя\ формулу:$$
+# $$Оценим\ напряжение\ V_n\ следующих\ максимумов\ в\ коэффициенте\ прохождения\ электронов\ используя\ формулу:$$
 
 # $$k_2l=\sqrt{\frac{2m(E_n+U_0)}{\hbar^2}}l=\pi n,\ n=1,2,3$$
 
-# In[9]:
+# $$E = eV$$
+
+# In[10]:
 
 
 print('V2 = {:.2f} В'.format(4*(Vmax1+U)-U))
 print('V3 = {:.2f} В'.format(9*(Vmax1+U)-U))
 
 
+# $$Найдем\ зависимость\ вероятности\ рассеяния\ w\ от\ напряжения\ V\ катода$$
+
 # $$w = -\frac{1}{C}ln\frac{I_a(V)}{I_0}$$
 
-# In[10]:
+# In[11]:
 
 
 C = 5
 I0 = 0.047
 w = [-1/C*np.log(Ia1_i/I0) for Ia1_i in Ia1]
 ylin3 = interp1d(Vk1, w, kind='cubic')(xlin1)
-plot = plt.figure(num='Зависимость вероятности рассеяния от энергии')
+plot = plt.figure(num='Зависимость вероятности рассеяния от напряжения катода')
 plt.plot(Vk1, w, 'ro', label='data points', markersize=12)
 plt.plot(xlin1, ylin3, color='black', linewidth=4, label='spline')
 plt.ylabel('w')
 plt.xlabel('Vкатода, В')
 plt.grid(linewidth=2)
 plt.legend()
-plt.title('Зависимость вероятности рассеяния от энергии')
+plt.title('Зависимость вероятности рассеяния от напряжения катода')
 plt.show()
 
