@@ -45,7 +45,7 @@ l_err1 = [h*32*m*e*np.sqrt(5)*div*Vmin_err[i]/np.sqrt(32*m*e*(-Vmin[i]+Vmax[i])*
 l_err2 = [h*32*m*e*np.sqrt(5)*div*Vmax_err[i]/np.sqrt(32*m*e*(-Vmin[i]+Vmax[i])*div)**3 for i in range(len(Vnak))]
 l_err = [np.sqrt(l_err1[i]**2 + l_err2[i]**2) for i in range(len(Vnak))]
 U0 = [4/5*(V0 - Vmin[i])*div - 9/5*(V0 - Vmax[i])*div for i in range(len(Vnak))]
-U0_err = [4/5*div*Vmin_err[i] + 9/5*div*Vmax_err[i] for i in range(len(Vnak))]
+U0_err = [np.sqrt((4/5*div*Vmin_err[i])**2 + (9/5*div*Vmax_err[i])**2) for i in range(len(Vnak))]
 
 
 # In[4]:
@@ -63,7 +63,7 @@ Vk1 = [0.375, 0.54, 0.74, 0.94, 1.117, 1.23, 1.37, 1.45, 1.553, 1.695, 1.905, 2.
        3.048, 3.217, 3.426, 4.168, 5.069, 5.287, 5.810, 6.012, 6.671, 7.390, 8.052, 9.018, 10.902, 11.978]
 Va1 = [2.12, 8.28, 23.45, 54.4, 71.85, 90.87, 111.15, 119.3, 129.66, 138.51, 140.10, 135.90, 126.0, 108.9,
        81.27, 74.26, 68.1, 52.5, 43.0, 42.1, 40.67, 40.7, 41.29, 42.9, 45.5, 52.3, 78.8, 109.0]
-R = 100 * 10*3
+R = 100
 Ia1 = [Va / R for Va in Va1]
 Vk2 = [0.591, 0.882, 1.2, 1.342, 1.679, 1.751, 1.550, 1.853, 2.07, 2.38, 2.77, 3.025,
        3.683, 4.21, 4.549, 4.964, 5.445, 5.665, 5.80, 6.243, 6.615, 6.937, 7.316, 7.883,
@@ -94,7 +94,7 @@ l_st1_err1 = h*32*m*e*np.sqrt(5)*div*Vmin1_err/np.sqrt(32*m*e*(Vmin1-Vmax1))**3
 l_st1_err2 = h*32*m*e*np.sqrt(5)*div*Vmax1_err/np.sqrt(32*m*e*(Vmin1-Vmax1))**3
 l_st1_err = np.sqrt(l_st1_err1**2 + l_st1_err2**2)
 U0_st1 = 4/5*Vmin1 - 9/5*Vmax1
-U0_st1_err = 4/5*Vmin1_err + 9/5*div*Vmax1_err
+U0_st1_err = np.sqrt((4/5*Vmin1_err)**2 + (9/5*Vmax1_err)**2)
           
 lmax_st2 = h/2/np.sqrt(2*m*e*(Vmax2+U))
 lmax_st2_err = h*8*m*e*div*Vmax2_err/2/np.sqrt(2*m*e*(Vmax2+U))**3
@@ -105,7 +105,7 @@ l_st2_err1 = h*32*m*e*np.sqrt(5)*div*Vmin2_err/np.sqrt(32*m*e*(Vmin2-Vmax2))**3
 l_st2_err2 = h*32*m*e*np.sqrt(5)*div*Vmax2_err/np.sqrt(32*m*e*(Vmin2-Vmax2))**3
 l_st2_err = np.sqrt(l_st2_err1**2 + l_st2_err2**2)
 U0_st2 = 4/5*Vmin2 - 9/5*Vmax2
-U0_st2_err = 4/5*Vmin2_err + 9/5*Vmax2_err
+U0_st2_err = np.sqrt((4/5*Vmin2_err)**2 + (9/5*Vmax2_err)**2)
 
 
 # In[6]:
@@ -116,15 +116,15 @@ plt.plot(Vk1, Ia1, 'ro', label='data points 2.84 V', markersize=15)
 plt.plot(xlin1, ylin1, color='black', linewidth=4, label='spline')
 plt.plot(Vk2, Ia2, '+', label='data points 2.56 V', markersize=20, mew=3)
 plt.plot(xlin2[10:750], ylin2[10:750], color='black', linewidth=4, label='spline')
-plt.axhline(y=0.0134, color="black", linestyle="--")
+plt.axhline(y=0.405, color="black", linestyle="--")
 plt.axvline(x=Vmin1, color="black", linestyle="--")
-plt.axhline(y=0.047, color="black", linestyle="--")
+plt.axhline(y=1.41, color="black", linestyle="--")
 plt.axvline(x=Vmax1, color="black", linestyle="--")
-plt.axhline(y=0.0046, color="black", linestyle="--")
+plt.axhline(y=0.14, color="black", linestyle="--")
 plt.axvline(x=Vmin2, color="black", linestyle="--")
-plt.axhline(y=0.0311, color="black", linestyle="--")
+plt.axhline(y=0.93, color="black", linestyle="--")
 plt.axvline(x=Vmax2, color="black", linestyle="--")
-plt.ylabel('Iанода, А')
+plt.ylabel('Iанода, мкА')
 plt.xlabel('Vкатода, В')
 plt.grid(linewidth=2)
 plt.legend()
@@ -211,7 +211,7 @@ print('V3 = {:.2f} В'.format(9*(Vmax1+U)-U))
 
 
 C = 5
-I0 = 0.047
+I0 = 1.41
 w = [-1/C*np.log(Ia1_i/I0) for Ia1_i in Ia1]
 ylin3 = interp1d(Vk1, w, kind='cubic')(xlin1)
 plot = plt.figure(num='Зависимость вероятности рассеяния от напряжения катода')
