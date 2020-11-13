@@ -15,16 +15,33 @@ import matplotlib.pyplot as plt
 import scipy.optimize as opt
 from scipy.interpolate import interp1d
 from scipy import odr
+from IPython.display import Image
 
+
+# Изображение динамического режима для напряжения накала 2.53В
 
 # In[2]:
 
 
+Image("Vnak1.jpg")
+
+
+# Изображение динамического режима для напряжения накала 2.84В
+
+# In[3]:
+
+
+Image("Vnak3.jpg")
+
+
+# In[4]:
+
+
 Vnak =  [2.5, 2.53, 2.7, 2.840, 2.9]
 Vmax = [0.25, 0.25, 0.25, -1, -0.75]
-Vmax_err = [0.25, 0.25, 0.25, 0.25, 0.25]
+Vmax_err = [0.5, 0.5, 1, 0.5, 0.5]
 Vmin = [-10.25, -10.75, -10.75, -11, -10.75]
-Vmin_err = [0.75, 0.75, 0.75, 1, 0.75]
+Vmin_err = [0.75, 0.75, 0.75, 0.75, 0.75]
 div = 2 / 5
 V0 = 4
 U = 2.5
@@ -33,7 +50,7 @@ m = 9.11 * 10**-31
 e = 1.6 * 10**-19
 
 
-# In[3]:
+# In[5]:
 
 
 lmax = [h/2/np.sqrt(2*m*e*((V0 - Vmax_i)*div+U)) for Vmax_i in Vmax]
@@ -48,7 +65,7 @@ U0 = [4/5*(V0 - Vmin[i])*div - 9/5*(V0 - Vmax[i])*div for i in range(len(Vnak))]
 U0_err = [np.sqrt((4/5*div*Vmin_err[i])**2 + (9/5*div*Vmax_err[i])**2) for i in range(len(Vnak))]
 
 
-# In[4]:
+# In[6]:
 
 
 font = {'size'   : 20}
@@ -56,7 +73,7 @@ plt.rc('font', **font)
 plt.rcParams['figure.figsize'] = [18, 14]
 
 
-# In[5]:
+# In[7]:
 
 
 Vk1 = [0.375, 0.54, 0.74, 0.94, 1.117, 1.23, 1.37, 1.45, 1.553, 1.695, 1.905, 2.058, 2.250, 2.540,
@@ -108,7 +125,7 @@ U0_st2 = 4/5*Vmin2 - 9/5*Vmax2
 U0_st2_err = np.sqrt((4/5*Vmin2_err)**2 + (9/5*Vmax2_err)**2)
 
 
-# In[6]:
+# In[8]:
 
 
 plot = plt.figure(num='ВАХ')
@@ -132,14 +149,14 @@ plt.title('ВАХ')
 plt.show()
 
 
-# In[7]:
+# In[9]:
 
 
 def get_display_string(value, err):
     return '{:.2f} +- {:.2f}'.format(value*10**10, err*10**10)
 
 
-# In[8]:
+# In[10]:
 
 
 Vmax_dyn1 = get_display_string((V0 - Vmax[0])*div/10**10, Vmax_err[0]*div/10**10)
@@ -181,19 +198,20 @@ U0_st2 = get_display_string(U0_st2/10**10, U0_st2_err/10**10)
 
 # $$U_0=\frac{4}{5}E_2 - \frac{9}{5}E_1$$
 
-# In[9]:
+# In[11]:
 
 
 print("Vнакала = 2.56 В")
-dt = pd.DataFrame({'Динамика': [Vmax_dyn2, Vmin_dyn2, lmax_dyn2, lmin_dyn2, l_dyn2, U0_dyn2],
-                   'Статика': [Vmax_st2, Vmin_st2, lmax_st2, lmin_st2, l_st2, U0_st2]},
+dt = pd.DataFrame({'Динамика': [Vmax_dyn1, Vmin_dyn1, lmax_dyn1, lmin_dyn1, l_dyn1, U0_dyn1],
+                   'Статика': [Vmax_st1, Vmin_st1, lmax_st1, lmin_st1, l_st1, U0_st1]},
                    index = ['Vmax, В', 'Vmin, В', 'lmax, Å', 'lmin, Å', 'l, Å', 'U0, В'])
 print(dt)
 
 print("\nVнакала = 2.84 В")
-dt = pd.DataFrame({'Динамика': [Vmax_dyn1, Vmin_dyn1, lmax_dyn1, lmin_dyn1, l_dyn1, U0_dyn1],
-                   'Статика': [Vmax_st1, Vmin_st1, lmax_st1, lmin_st1, l_st1, U0_st1]},
+dt = pd.DataFrame({'Динамика': [Vmax_dyn2, Vmin_dyn2, lmax_dyn2, lmin_dyn2, l_dyn2, U0_dyn2],
+                   'Статика': [Vmax_st2, Vmin_st2, lmax_st2, lmin_st2, l_st2, U0_st2]},
                    index = ['Vmax, В', 'Vmin, В', 'lmax, Å', 'lmin, Å', 'l, Å', 'U0, В'])
+
 print(dt)
 print('\nРазмер электронной оболочки ксенона = 1.08 Å')
 
@@ -204,7 +222,7 @@ print('\nРазмер электронной оболочки ксенона = 1
 
 # $$E = eV$$
 
-# In[10]:
+# In[12]:
 
 
 print('V2 = {:.2f} В'.format(4*(Vmax1+U)-U))
@@ -215,16 +233,21 @@ print('V3 = {:.2f} В'.format(9*(Vmax1+U)-U))
 
 # $$w = -\frac{1}{C}ln\frac{I_a(V)}{I_0}$$
 
-# In[11]:
+# In[13]:
 
 
 C = 5
-I0 = 1.41
-w = [-1/C*np.log(Ia1_i/I0) for Ia1_i in Ia1]
-ylin3 = interp1d(Vk1, w, kind='cubic')(xlin1)
+I0_1 = 1.41
+I0_2 = 0.93
+w1 = [-1/C*np.log(Ia1_i/I0_1) for Ia1_i in Ia1]
+w2 = [-1/C*np.log(Ia2_i/I0_2) for Ia2_i in Ia2]
+ylin3_1 = interp1d(Vk1, w1, kind='cubic')(xlin1)
+ylin3_2 = interp1d(Vk2, w2, kind='cubic')(xlin2)
 plot = plt.figure(num='Зависимость вероятности рассеяния от напряжения катода')
-plt.plot(Vk1, w, 'ro', label='data points', markersize=12)
-plt.plot(xlin1, ylin3, color='black', linewidth=4, label='spline')
+plt.plot(Vk1, w1, '+', label='data points 2.56В', markersize=20, mew=3)
+plt.plot(Vk2, w2, 'ro', label='data points 2.84В', markersize=12)
+plt.plot(xlin1, ylin3_1, color='black', linewidth=4, label='spline')
+plt.plot(xlin2, ylin3_2, color='black', linewidth=4, label='spline')
 plt.ylabel('w')
 plt.xlabel('Vкатода, В')
 plt.grid(linewidth=2)
