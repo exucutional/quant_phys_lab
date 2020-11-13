@@ -73,36 +73,36 @@ Va2 = [3.42, 20.19, 50.79, 76.49, 92.75, 90.20, 90.2, 85.78, 71.62, 53.50, 36.92
       15.85, 17.02, 22.36, 23.27, 29.05, 35.12]
 Ia2 = [Va / R for Va in Va2]
 Vmin1 = 5.95
-Vmin1_err = 0.8
+Vmin1_err = 0.4
 Vmax1 = 1.84
-Vmax1_err = 0.4
+Vmax1_err = 0.2
 Vmin2 = 6.2
-Vmin2_err = 0.8
+Vmin2_err = 0.4
 Vmax2 = 1.66
-Vmax2_err = 0.4
+Vmax2_err = 0.2
 xlin1 = np.linspace(Vk1[0], Vk1[-1], num=1000, endpoint=True)
 ylin1 = interp1d(Vk1, Ia1, kind='cubic')(xlin1)
 xlin2 = np.linspace(Vk2[0], Vk2[-1], num=1000, endpoint=True)
 ylin2 = interp1d(Vk2, Ia2, kind='cubic')(xlin2)
 
 lmax_st1 = h/2/np.sqrt(2*m*e*(Vmax1+U))
-lmax_st1_err = h*8*m*e*div*Vmax1_err/2/np.sqrt(2*m*e*(Vmax1+U))**3
+lmax_st1_err = h*8*m*e*Vmax1_err/2/np.sqrt(2*m*e*(Vmax1+U))**3
 lmin_st1 = 3*h/4/np.sqrt(2*m*e*(Vmin1+U))
-lmin_st1_err = h*8*m*e*div*Vmin1_err/2/np.sqrt(2*m*e*(Vmin1+U))**3
+lmin_st1_err = h*8*m*e*Vmin1_err/2/np.sqrt(2*m*e*(Vmin1+U))**3
 l_st1 = h*np.sqrt(5)/np.sqrt(32*m*e*(Vmin1-Vmax1))
-l_st1_err1 = h*32*m*e*np.sqrt(5)*div*Vmin1_err/np.sqrt(32*m*e*(Vmin1-Vmax1))**3
-l_st1_err2 = h*32*m*e*np.sqrt(5)*div*Vmax1_err/np.sqrt(32*m*e*(Vmin1-Vmax1))**3
+l_st1_err1 = h*32*m*e*np.sqrt(5)*Vmin1_err/np.sqrt(32*m*e*(Vmin1-Vmax1))**3
+l_st1_err2 = h*32*m*e*np.sqrt(5)*Vmax1_err/np.sqrt(32*m*e*(Vmin1-Vmax1))**3
 l_st1_err = np.sqrt(l_st1_err1**2 + l_st1_err2**2)
 U0_st1 = 4/5*Vmin1 - 9/5*Vmax1
 U0_st1_err = np.sqrt((4/5*Vmin1_err)**2 + (9/5*Vmax1_err)**2)
           
 lmax_st2 = h/2/np.sqrt(2*m*e*(Vmax2+U))
-lmax_st2_err = h*8*m*e*div*Vmax2_err/2/np.sqrt(2*m*e*(Vmax2+U))**3
+lmax_st2_err = h*8*m*e*Vmax2_err/2/np.sqrt(2*m*e*(Vmax2+U))**3
 lmin_st2 = 3*h/4/np.sqrt(2*m*e*(Vmin2+U))
-lmin_st2_err = h*8*m*e*div*Vmin2_err/2/np.sqrt(2*m*e*(Vmin2+U))**3
+lmin_st2_err = h*8*m*e*Vmin2_err/2/np.sqrt(2*m*e*(Vmin2+U))**3
 l_st2 = h*np.sqrt(5)/np.sqrt(32*m*e*(Vmin2-Vmax2))
-l_st2_err1 = h*32*m*e*np.sqrt(5)*div*Vmin2_err/np.sqrt(32*m*e*(Vmin2-Vmax2))**3
-l_st2_err2 = h*32*m*e*np.sqrt(5)*div*Vmax2_err/np.sqrt(32*m*e*(Vmin2-Vmax2))**3
+l_st2_err1 = h*32*m*e*np.sqrt(5)*Vmin2_err/np.sqrt(32*m*e*(Vmin2-Vmax2))**3
+l_st2_err2 = h*32*m*e*np.sqrt(5)*Vmax2_err/np.sqrt(32*m*e*(Vmin2-Vmax2))**3
 l_st2_err = np.sqrt(l_st2_err1**2 + l_st2_err2**2)
 U0_st2 = 4/5*Vmin2 - 9/5*Vmax2
 U0_st2_err = np.sqrt((4/5*Vmin2_err)**2 + (9/5*Vmax2_err)**2)
@@ -142,21 +142,29 @@ def get_display_string(value, err):
 # In[8]:
 
 
+Vmax_dyn1 = get_display_string((V0 - Vmax[0])*div/10**10, Vmax_err[0]*div/10**10)
+Vmin_dyn1 = get_display_string((V0 - Vmin[0])*div/10**10, Vmin_err[0]*div/10**10)
 lmax_dyn1 = get_display_string(lmax[0], lmax_err[0])
 lmin_dyn1 = get_display_string(lmin[0], lmin_err[0])
 l_dyn1 = get_display_string(l[0], l_err[0])
 U0_dyn1 = get_display_string(U0[0]/10**10, U0_err[0]/10**10)
 
+Vmax_dyn2 = get_display_string((V0 - Vmax[2])*div/10**10, Vmax_err[2]*div/10**10)
+Vmin_dyn2 = get_display_string((V0 - Vmin[2])*div/10**10, Vmin_err[2]*div/10**10)
 lmax_dyn2 = get_display_string(lmax[2], lmax_err[2])
 lmin_dyn2 = get_display_string(lmin[2], lmin_err[2])
 l_dyn2 = get_display_string(l[2], l_err[2])
 U0_dyn2 = get_display_string(U0[2]/10**10, U0_err[2]/10**10)
 
+Vmax_st1 = get_display_string(Vmax1/10**10, Vmax1_err/10**10)
+Vmin_st1 = get_display_string(Vmin1/10**10, Vmin1_err/10**10)
 lmax_st1 = get_display_string(lmax_st1, lmax_st1_err)
 lmin_st1 = get_display_string(lmin_st1, lmin_st1_err)
 l_st1 = get_display_string(l_st1, l_st1_err)
 U0_st1 = get_display_string(U0_st1/10**10, U0_st1_err/10**10)
 
+Vmax_st2 = get_display_string(Vmax2/10**10, Vmax2_err/10**10)
+Vmin_st2 = get_display_string(Vmin2/10**10, Vmin2_err/10**10)
 lmax_st2 = get_display_string(lmax_st2, lmax_st2_err)
 lmin_st2 = get_display_string(lmin_st2, lmin_st2_err)
 l_st2 = get_display_string(l_st2, l_st2_err)
@@ -177,15 +185,15 @@ U0_st2 = get_display_string(U0_st2/10**10, U0_st2_err/10**10)
 
 
 print("Vнакала = 2.56 В")
-dt = pd.DataFrame({'Динамика': [lmax_dyn2, lmin_dyn2, l_dyn2, U0_dyn2],
-                   'Статика': [lmax_st2, lmin_st2, l_st2, U0_st2]},
-                   index = ['lmax, Å', 'lmin, Å', 'l, Å', 'U0, В'])
+dt = pd.DataFrame({'Динамика': [Vmax_dyn2, Vmin_dyn2, lmax_dyn2, lmin_dyn2, l_dyn2, U0_dyn2],
+                   'Статика': [Vmax_st2, Vmin_st2, lmax_st2, lmin_st2, l_st2, U0_st2]},
+                   index = ['Vmax, В', 'Vmin, В', 'lmax, Å', 'lmin, Å', 'l, Å', 'U0, В'])
 print(dt)
 
 print("\nVнакала = 2.84 В")
-dt = pd.DataFrame({'Динамика': [lmax_dyn1, lmin_dyn1, l_dyn1, U0_dyn1],
-                   'Статика': [lmax_st1, lmin_st1, l_st1, U0_st1]},
-                   index = ['lmax, Å', 'lmin, Å', 'l, Å', 'U0, В'])
+dt = pd.DataFrame({'Динамика': [Vmax_dyn1, Vmin_dyn1, lmax_dyn1, lmin_dyn1, l_dyn1, U0_dyn1],
+                   'Статика': [Vmax_st1, Vmin_st1, lmax_st1, lmin_st1, l_st1, U0_st1]},
+                   index = ['Vmax, В', 'Vmin, В', 'lmax, Å', 'lmin, Å', 'l, Å', 'U0, В'])
 print(dt)
 print('\nРазмер электронной оболочки ксенона = 1.08 Å')
 
